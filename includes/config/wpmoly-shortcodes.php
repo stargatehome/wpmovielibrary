@@ -53,6 +53,19 @@ $wpmoly_shortcodes = array(
 		'aliases'  => null
 	),
 
+	'similar_movies' => array(
+		'atts'     => array(
+			/*'title' => array(
+				'default' => false,
+				'values'  => 'boolean',
+				'filter'  => 'esc_attr'
+			),*/
+		),
+		'content'  => null,
+		'callback' => 'similar_movies_shortcode',
+		'aliases'  => null
+	),
+
 	'movies' => array(
 		'atts' => array(
 			'collection' => array(

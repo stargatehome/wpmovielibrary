@@ -1026,6 +1026,32 @@ if ( ! class_exists( 'WPMOLY_Movies' ) ) :
 			return self::get_movies( $args );
 		}
 
+		/**
+		 * Retrieve a list of Movies similar to a specific movie.
+		 * 
+		 * @since    2.1
+		 * 
+		 * @param    int|WP_Post    $movie Optional. Movie post ID or post object. Defaults to global $post.
+		 * 
+		 * @return   WP_Post|null WP_Post on success or null on failure
+		 */
+		public static function get_similar_movies( $movie = null ) {
+
+			global $post;
+			if ( is_null( $movie ) )
+				$movie = $post;
+
+			if ( 'movie' != get_post_type( $movie ) )
+				return null;
+
+			if ( ! is_object( $movie ) )
+				$movie = self::get_movie( $movie );
+
+			$collections = get_the_terms( $movie, 'collection' );
+			$genres      = get_the_terms( $movie, 'genre' );
+			$actors      = get_the_terms( $movie, 'actor' );
+		}
+
 		/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 *
 		 *                              Movie Grid

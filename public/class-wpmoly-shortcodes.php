@@ -123,6 +123,21 @@ if ( ! class_exists( 'WPMOLY_Shortcodes' ) ) :
 		}
 
 		/**
+		 * Similar Movies shortcode.
+		 *
+		 * @since    2.1
+		 * 
+		 * @param    array     Shortcode attributes
+		 * @param    string    Shortcode content
+		 * 
+		 * @return   string    Shortcode display
+		 */
+		public static function similar_movies_shortcode( $atts = array(), $content = null ) {
+
+			$movies = WPMOLY_Movies::get_similar_movies();
+		}
+
+		/**
 		 * Movies shortcode. Display a list of movies with various sorting
 		 * and display options.
 		 *
