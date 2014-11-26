@@ -134,7 +134,8 @@ if ( ! class_exists( 'WPMOLY_Shortcodes' ) ) :
 		 */
 		public static function similar_movies_shortcode( $atts = array(), $content = null ) {
 
-			$movies = WPMOLY_Movies::get_similar_movies();
+			$movies = WPMOLY_Movies::get_similar_movies( 2854 );
+			print_r( $movies );
 		}
 
 		/**

@@ -1092,21 +1092,99 @@ if ( ! class_exists( 'WPMOLY_Movies' ) ) :
 		 * 
 		 * @return   WP_Post|null WP_Post on success or null on failure
 		 */
-		public static function get_similar_movies( $movie = null ) {
+		public static function get_similar_movies( $movie = null, $args = array() ) {
 
-			global $post;
+			global $wpdb, $post;
+
 			if ( is_null( $movie ) )
 				$movie = $post;
 
 			if ( 'movie' != get_post_type( $movie ) )
 				return null;
 
-			if ( ! is_object( $movie ) )
-				$movie = self::get_movie( $movie );
+			$defaults = array(
+				'order'   => 'rand',
+				'orderby' => 'title',
+				'number'  => 4
+			);
+			$args = wp_parse_args( $args, $defaults );
 
-			$collections = get_the_terms( $movie, 'collection' );
-			$genres      = get_the_terms( $movie, 'genre' );
-			$actors      = get_the_terms( $movie, 'actor' );
+			$args['post_type']      = 'movie';
+			$args['post_status']    = 'publish';
+			$args['posts_per_page'] = $args['number'];
+			unset( $args['number'] );
+
+			$collections  = get_the_terms( $movie, 'collection' );
+			$genres       = get_the_terms( $movie, 'genre' );
+			$actors       = get_the_terms( $movie, 'actor' );
+			$actors       = array_slice( $actors, 0, 5 );
+
+			$_collections = array();
+			$_genres      = array();
+			$_actors      = array();
+
+			foreach ( $collections as $term )
+				$_collections[] = $term->term_taxonomy_id;
+
+			foreach ( $genres as $term )
+				$_genres[] = $term->term_taxonomy_id;
+
+			foreach ( $actors as $term )
+				$_actors[] = $term->term_taxonomy_id;
+
+			$collections = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT p.ID
+					   FROM {$wpdb->posts} AS p
+					  INNER JOIN {$wpdb->term_relationships} AS tr ON (p.ID = tr.object_id)
+					  WHERE tr.term_taxonomy_id IN ( %s )
+					    AND p.post_type = 'movie'
+					    AND p.post_status = 'publish'
+					    AND p.ID != %d",
+					implode( ',', $_collections ),
+					$movie
+				)
+			);
+
+			$genres = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT p.ID
+					   FROM {$wpdb->posts} AS p
+					  INNER JOIN {$wpdb->term_relationships} AS tr ON (p.ID = tr.object_id)
+					  WHERE tr.term_taxonomy_id IN ( %s )
+					    AND p.post_type = 'movie'
+					    AND p.post_status = 'publish'
+					    AND p.ID != %d",
+					implode( ',', $_genres ),
+					$movie
+				)
+			);
+
+			/*$args['tax_query'] = array(
+				'relation' => 'OR',
+				array(
+					'taxonomy' => 'collection',
+					'field'    => 'id',
+					'terms'    => $_collections,
+					'operator' => 'IN',
+				),
+				array(
+					'taxonomy' => 'genre',
+					'field'    => 'id',
+					'terms'    => $_genres,
+					'operator' => 'IN',
+				),
+				array(
+					'taxonomy' => 'actor',
+					'field'    => 'id',
+					'terms'    => $_actors,
+					'operator' => 'IN',
+				)
+			);
+
+			$movies = new WP_Query( $args );
+			print_r( $movies );*/
+			die('!');
 		}
 
 		/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
