@@ -11,12 +11,13 @@
 
 		model: editor.search,
 
-		initialize: function () {
+		initialize: function() {
+
 			this.template = _.template( $( '#wpmoly-movie-meta-search' ).html() );
-			this.render(); 
+			this.render();
 		},
 
-		render: function () {
+		render: function(  ) {
 			this.$el.html( this.template() );
 			return this;
 		},
@@ -55,22 +56,38 @@
 
 		model: editor.movie,
 
-		initialize: function () {
-			this.template = _.template( $( '#wpmoly-movie-meta' ).html() );
-			this.render(); 
-		},
-
-		render: function () {
-			this.$el.html( this.template() );
-			return this;
-		},
-
 		events: {
 			"change .meta-data-field": "update"
 		},
 
+		initialize: function () {
+			this.template = _.template( $( '#wpmoly-movie-meta' ).html() );
+			this.render();
+
+			_.bindAll( this, 'render' );
+
+			this.model.on( 'change', this.changed, this );
+		},
+
+		render: function( model ) {
+
+			this.$el.html( this.template() );
+			return this;
+		},
+
+		changed: function( model ) {
+
+			_.each( model.changed, function( meta, key ) {
+				$( '#meta_data_' + key ).val( meta );
+			} );
+		},
+
 		update: function( event ) {
-			console.log( event.currentTarget );
+
+			var meta = event.currentTarget.id.replace('meta_data_',''),
+			   value = event.currentTarget.value;
+
+			this.model.set( meta, value );
 		}
 	});
 

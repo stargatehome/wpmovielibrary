@@ -82,16 +82,21 @@ window.wpmoly = window.wpmoly || {};
 				lang: editor.search.attributes.lang
 			});
 
-			/*options.success = function( response ) {
+			options.success = function( response ) {
 
-				_.each( response, function( result ) {
+				_.each( response.meta, function( meta ) {
 
-					var result = new Result( result );
-					editor.results.add( result );
+					
 				} );
-			};*/
+			};
 
 			return wp.ajax.send( options );
+		},
+
+		_set: function( data ) {
+
+			var meta = _.extend( this.defaults, data.meta );
+			editor.movie.set( meta );
 		}
 	});
 
@@ -137,6 +142,11 @@ window.wpmoly = window.wpmoly || {};
 			});
 
 			options.success = function( response ) {
+
+				if ( undefined != response.meta ) {
+					editor.movie._set( response );
+					return true;
+				}
 
 				_.each( response, function( result ) {
 
