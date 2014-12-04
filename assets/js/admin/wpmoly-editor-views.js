@@ -35,7 +35,7 @@
 
 		search: function( event ) {
 			event.preventDefault();
-			editor.results.sync( 'search', this.model, {} );
+			editor.results.sync( this.model, {} );
 		},
 
 		update: function( event ) {
@@ -80,6 +80,10 @@
 
 		collection: editor.results,
 
+		events : {
+			'click .wpmoly-select-movie a' : 'get'
+		},
+
 		initialize: function() {
 
 			this.template = _.template( $( '#wpmoly-search-results-template' ).html() );
@@ -87,17 +91,27 @@
 			_.bindAll( this, 'render' );
 			this.collection.bind( 'change', this.render );
 			this.collection.bind( 'add', this.render );
-			this.collection.bind( 'remove', this.render );
 		},
 
 		render: function() {
 
-			var renderedContent = this.template( { results : this.collection.toJSON() } );
+			var results = this.template( { results : this.collection.toJSON() } );
 
 			$( this.el ).show();
-			$( this.el ).html( renderedContent );
+			$( this.el ).html( results );
 
 			return this;
+		},
+
+		get: function( event ) {
+
+			event.preventDefault();
+
+			var id = event.currentTarget.hash.replace('#','');
+			editor.movie.sync( this.model, { data: {
+				type: 'id',
+				data: id
+			} } );
 		}
 
 	});

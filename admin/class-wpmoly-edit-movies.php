@@ -72,8 +72,8 @@ if ( ! class_exists( 'WPMOLY_Edit_Movies' ) ) :
 ?>
 		<script type="text/template" id="wpmoly-search-results-template">
 								<% _.each( results, function( result ) { %>
-									<div class="tmdb_select_movie">
-										<a id="tmdb_<%= result.id %>" href="#">
+									<div class="wpmoly-select-movie">
+										<a id="wpmoly-select-movie-<%= result.id %>" href="#<%= result.id %>">
 											<img src="<%= result.poster %>" alt="<%= result.title %>" />
 											<em><%= result.title %></em> (<%= result.year %>)
 										</a>

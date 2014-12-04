@@ -117,12 +117,11 @@ if ( ! class_exists( 'WPMOLY_TMDb' ) ) :
 			else if ( 'id' == $type )
 				$response = self::get_movie_by_id( $data, $lang, $_id );
 
-			//print_r( $response ); die();
+			print_r( $response ); die();
 			if ( empty( $response ) )
 				wp_send_json_error( 'empty' );
 
 			wp_send_json_success( $response );
-			//wpmoly_ajax_response( $response );
 		}
 
 		/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -230,6 +229,8 @@ if ( ! class_exists( 'WPMOLY_TMDb' ) ) :
 			$title  = preg_replace( '/[^\p{L}\p{N}\s]/u', '', trim( $title ) );
 			$data   = $tmdb->searchMovie( $title, 1, FALSE, NULL, $lang );
 
+			$error = new WP_Error();
+
 			if ( is_wp_error( $data ) )
 				return $data;
 
@@ -237,12 +238,15 @@ if ( ! class_exists( 'WPMOLY_TMDb' ) ) :
 
 			if ( isset( $data['status_code'] ) ) {
 
+				$error->add( esc_attr( $data['status_code'] ), esc_attr( $data['status_message'] ), $data );
 			}
 			else if ( ! isset( $data['total_results'] ) ) {
 
+				$error->add( 'empty',  __( 'Sorry, your search returned no result. Try a more specific query?', 'wpmovielibrary' ), $data );
 			}
 			else if ( 1 == $data['total_results'] ) {
 
+				$movies = self::get_movie_by_id( $data['results'][0]['id'], $lang, $post_id );
 			}
 			else if ( $data['total_results'] > 1 ) {
 

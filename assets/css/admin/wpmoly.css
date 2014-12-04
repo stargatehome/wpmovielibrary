@@ -72,7 +72,7 @@ body.post-php.post-type-movie #postimagediv {
 
 /* Select Movies */
 
-.tmdb_select_movie {
+.wpmoly-select-movie {
 	display: inline-table;
 	height: 18em;
 	padding: 0.25em;
@@ -81,19 +81,19 @@ body.post-php.post-type-movie #postimagediv {
 	width: 12.5em;
 }
 
-.tmdb_select_movie a {
+.wpmoly-select-movie a {
 	color: #eee;
 	text-decoration: none;
 }
 
-.tmdb_select_movie img {
+.wpmoly-select-movie img {
 	border-radius: 4px;
 	box-shadow: 0 1px 1px #333;
 	max-height: 16em;
 	max-width: 12.5em;
 }
 
-.tmdb_select_movie em {
+.wpmoly-select-movie em {
 	display: block;
 }
 
