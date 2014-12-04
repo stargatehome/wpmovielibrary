@@ -30,13 +30,13 @@
 		},
 
 		set: function( event ) {
-			//console.log( this.model );
+
 			this.model.set( { query: event.currentTarget.value } );
 		},
 
 		search: function( event ) {
 			event.preventDefault();
-			editor.results.sync( this.model, {} );
+			editor.movie.sync( 'search', this.model, {} );
 		},
 
 		update: function( event ) {
@@ -60,7 +60,8 @@
 			"change .meta-data-field": "update"
 		},
 
-		initialize: function () {
+		initialize: function() {
+
 			this.template = _.template( $( '#wpmoly-movie-meta' ).html() );
 			this.render();
 
@@ -125,10 +126,11 @@
 			event.preventDefault();
 
 			var id = event.currentTarget.hash.replace('#','');
-			editor.movie.sync( this.model, { data: {
-				type: 'id',
-				data: id
-			} } );
+
+			editor.search.set( 'type', 'id' );
+			editor.search.set( 'query', id );
+
+			editor.movie.sync( 'get', this.model, {} );
 		}
 
 	});

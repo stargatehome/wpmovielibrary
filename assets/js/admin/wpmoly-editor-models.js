@@ -37,7 +37,13 @@ window.wpmoly = window.wpmoly || {};
 			}
 		},
 
-		initialize: function() {}
+		initialize: function() {},
+
+		changed: function( model ) {
+
+			/*$( '#wpmoly-search-type option:selected' ).prop( 'selected', false );
+			$( '#wpmoly-search-type option[value="id"]' ).prop( 'selected', true );*/
+		}
 	});
 
 	Movie = editor.model.Movie = Backbone.Model.extend({
@@ -70,33 +76,65 @@ window.wpmoly = window.wpmoly || {};
 			homepage: ''
 		},
 
-		initialize: function() {},
+		initialize: function() {
 
-		sync: function( model, options ) {
+			this.url = ajaxurl;
+			this.post_id = $( '#post_ID' ).val();
+		},
 
-			options = options || {};
-			options.context = this;
-			options.data = _.extend( options.data || {}, {
-				action: 'wpmoly_search_movie',
-				nonce: wpmoly.get_nonce( 'search-movies' ),
-				lang: editor.search.attributes.lang
-			});
+		sync: function( method, model, options ) {
 
-			options.success = function( response ) {
+			if ( 'search' == method ) {
 
-				_.each( response.meta, function( meta ) {
+				options = options || {};
+				options.context = this;
+				options.data = _.extend( options.data || {}, {
+					action: 'wpmoly_search_movie',
+					nonce: wpmoly.get_nonce( 'search-movies' ),
+					lang: editor.search.get( 'lang' ),
+					data: editor.search.get( 'query' ),
+					type: editor.search.get( 'type' )
+				});
 
-					
-				} );
-			};
+				options.success = function( response ) {
 
-			return wp.ajax.send( options );
+					if ( undefined != response.meta ) {
+						this._set( response );
+						return true;
+					}
+
+					_.each( response, function( result ) {
+						var result = new Result( result );
+						editor.results.add( result );
+					} );
+				};
+
+				return wp.ajax.send( options );
+			}
+			else {
+				return Backbone.Model.prototype.sync.apply( this, options );
+			}
 		},
 
 		_set: function( data ) {
 
 			var meta = _.extend( this.defaults, data.meta );
 			editor.movie.set( meta );
+		},
+
+		save: function() {
+
+			var params = {
+				emulateJSON: true,
+				data: { 
+					action: 'wpmoly_save_meta',
+					nonce: wpmoly.get_nonce( 'save-movie-meta' ),
+					post_id: this.post_id,
+					data: this.toJSON()
+				} 
+			};
+
+			return Backbone.sync( 'create', this, params );
 		}
 	});
 
@@ -120,43 +158,7 @@ window.wpmoly = window.wpmoly || {};
 
 		model: Result,
 
-		initialize: function() {
-
-			//this.bind( 'add', this.changed );
-		},
-
-		changed: function() {
-			console.log( '!' );
-		},
-
-		sync: function( model, options ) {
-
-			options = options || {};
-			options.context = this;
-			options.data = _.extend( options.data || {}, {
-				action: 'wpmoly_search_movie',
-				nonce: wpmoly.get_nonce( 'search-movies' ),
-				type: editor.search.attributes.type,
-				data: editor.search.attributes.query,
-				lang: editor.search.attributes.lang
-			});
-
-			options.success = function( response ) {
-
-				if ( undefined != response.meta ) {
-					editor.movie._set( response );
-					return true;
-				}
-
-				_.each( response, function( result ) {
-
-					var result = new Result( result );
-					editor.results.add( result );
-				} );
-			};
-
-			return wp.ajax.send( options );
-		}
+		initialize: function() {}
 	});
 
 	Panel = editor.model.Panel = Backbone.Model.extend({});

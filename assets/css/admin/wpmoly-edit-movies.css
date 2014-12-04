@@ -295,12 +295,9 @@
 	margin-left: 1px;
 }
 
+#wpmoly-search-lang,
 #wpmoly-search-type {
-	display: none;
-}
-
-#wpmoly-search-lang {
-	margin-top: -3px;
+	margin-top: -2px;
 }
 
 #wpmoly-search-query {
