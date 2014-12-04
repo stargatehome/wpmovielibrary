@@ -57,6 +57,8 @@ if ( ! class_exists( 'WPMOLY_Edit_Movies' ) ) :
 
 			add_action( 'wp_ajax_wpmoly_save_meta', __CLASS__ . '::save_meta_callback' );
 			add_action( 'wp_ajax_wpmoly_empty_meta', __CLASS__ . '::empty_meta_callback' );
+
+			add_action( 'admin_footer', __CLASS__ . '::footer_scripts' );
 		}
 
 		/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -64,6 +66,23 @@ if ( ! class_exists( 'WPMOLY_Edit_Movies' ) ) :
 		 *                        Scripts & Styles
 		 * 
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		public static function footer_scripts() {
+
+?>
+		<script type="text/template" id="wpmoly-search-results-template">
+								<% _.each( results, function( result ) { %>
+									<div class="tmdb_select_movie">
+										<a id="tmdb_<%= result.id %>" href="#">
+											<img src="<%= result.poster %>" alt="<%= result.title %>" />
+											<em><%= result.title %></em> (<%= result.year %>)
+										</a>
+									</div>
+
+								<% }); %>
+		</script>
+<?php
+		}
 
 		/**
 		 * Enqueue required media scripts and styles

@@ -13,8 +13,8 @@ wpmoly = wpmoly || {};
 	 * @param    function    Function to run on success
 	 * @param    function    Function to run on complete
 	 */
-	wpmoly.__ajax = function( data ) {
-		var data = $.extend({
+	wpmoly.ajax = function( data ) {
+		var data = _.extend({
 				url: ajaxurl
 			},
 			data

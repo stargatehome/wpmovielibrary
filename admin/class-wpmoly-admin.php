@@ -405,8 +405,8 @@ if ( ! class_exists( 'WPMovieLibrary_Admin' ) ) :
 			if ( $hook_suffix == $edit || $hook_suffix == $new ) {
 				$scripts['jquery-ajax-queue'] = array( '/assets/js/vendor/jquery-ajaxQueue.js', array( 'jquery' ), true );
 				$scripts['media']             = array( '/assets/js/admin/wpmoly-media.js', array( $wpmoly_slug, 'jquery' ), true );
-				$scripts['editor-details']    = array( '/assets/js/admin/wpmoly-editor-details.js', array( $wpmoly_slug, 'jquery' ), true );
-				$scripts['editor-meta']       = array( '/assets/js/admin/wpmoly-editor-meta.js', array( $wpmoly_slug, 'jquery' ), true );
+				$scripts['editor-models']     = array( '/assets/js/admin/wpmoly-editor-models.js', array( $wpmoly_slug, 'jquery' ), true );
+				$scripts['editor-views']      = array( '/assets/js/admin/wpmoly-editor-views.js', array( $wpmoly_slug, 'jquery' ), true );
 			}
 
 			if ( $hook_suffix == $movies ) {

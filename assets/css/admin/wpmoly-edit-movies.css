@@ -36,6 +36,7 @@
 #wpmoly-meta-menu .tab a {
 	border-bottom: 1px solid #f5f5f5;
 	border-top: 1px solid #eaeaea;
+	box-shadow: 0 0 0;
 	display: block;
 	line-height: 1.4em;
 	padding: 0.75em 1em;
@@ -45,6 +46,7 @@
 #wpmoly-meta-menu .tab.active a {
 	background-color: #fff;
 	border-color: #dfdfdf;
+	box-shadow: 0 0 0;
 	color: #555;
 	margin: 0 -1px 0 0;
 	position: relative;
@@ -305,14 +307,14 @@
 	height: 28px;
 }
 
-#meta_data {
+#wpmoly-meta-search-results {
 	background: #333;
 	display: none;
 	margin: 0.75em -1em;
 	padding: 0.75em 0;
 }
 
-#meta_data p {
+#wpmoly-meta-search-results p {
 	color: #eee;
 	padding: 0 1.5em;
 }
