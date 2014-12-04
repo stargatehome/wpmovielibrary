@@ -130,11 +130,21 @@ window.wpmoly = window.wpmoly || {};
 					action: 'wpmoly_save_meta',
 					nonce: wpmoly.get_nonce( 'save-movie-meta' ),
 					post_id: this.post_id,
-					data: this.toJSON()
+					data: this.parse( this.toJSON() )
 				} 
 			};
 
 			return Backbone.sync( 'create', this, params );
+		},
+
+		parse: function( data ) {
+
+			_.map( data, function( meta, key ) {
+				if ( _.isArray( meta ) )
+					data[ key ] = meta.toString();
+			} );
+
+			return data;
 		}
 	});
 
